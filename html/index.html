@@ -2,14 +2,22 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <title>TfL API Client Demo</title>
 </head>
 <body>
-
-<h1>TfL API Client Demo</h1>
-
-<div id="app">
-    <pre>{{apiJSON}}</pre>
+<div id="app" class="container">
+    <h1>TfL API Client Demo</h1>
+    <div class="card" v-if="api.type">
+        <div class="card-block">
+            <h4 class="card-title">Type: {{api.type}}</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li v-for="row in api.data" class="list-group-item">
+                {{row.data.properties.name}}
+            </li>
+        </ul>
+    </div>
 </div>
 
 <script src="bundle.js"></script>
@@ -25,9 +33,9 @@
                 return JSON.stringify(this.api, null, 2);
             }
         }
-    })
+    });
 
-    var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    var api = new TfLAPIClient('http://85.93.212.79:9001');
     api.subscribe('/BikePoint', function(data) {
         console.log(data);
         app.api = data;
