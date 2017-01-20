@@ -2,10 +2,13 @@ import IO  from 'socket.io-client';
 import url from 'url';
 
 class Client {
-    constructor(host) {
-        this.host = host || 'https://api.tfl.lu/latest';
-        var { pathname } = url.parse(this.host);
+    constructor(urlString) {
+        urlString = urlString || 'https://api.tfl.lu/latest';
+        this.host = url.resolve(urlString, '/');
+
+        var { pathname } = url.parse(urlString);
         this.path = pathname.replace(/\/$/, '') + '/stream';
+        
         this.subscriptions = {};
         this.io = IO(this.host, {
             path: this.path

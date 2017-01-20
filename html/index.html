@@ -35,9 +35,8 @@
         }
     });
 
-    var api = new TfLAPIClient('http://85.93.212.79:9001');
+    var api = new TfLAPIClient('https://api.tfl.lu/dev');
     api.subscribe('/BikePoint', function(data) {
-        console.log(data);
         app.api = data;
     });
 </script>
