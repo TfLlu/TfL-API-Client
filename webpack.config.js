@@ -12,7 +12,7 @@ module.exports = {
         path: DIST_DIR,
         filename: 'bundle.js',
         libraryTarget: 'umd',
-        umdNamedDefine: true
+        library: 'TfLAPIClient'
     },
     module: {
         loaders: [

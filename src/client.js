@@ -8,7 +8,7 @@ class Client {
 
         var { pathname } = url.parse(urlString);
         this.path = pathname.replace(/\/$/, '') + '/stream';
-        
+
         this.subscriptions = {};
         this.io = IO(this.host, {
             path: this.path
@@ -28,10 +28,6 @@ class Client {
         }
         this.subscriptions[path].push(callback);
     }
-}
-
-if (window) {
-    window.TfLAPIClient = Client;
 }
 
 export default Client;
