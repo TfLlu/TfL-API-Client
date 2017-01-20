@@ -1,11 +1,14 @@
-import IO from 'socket.io-client';
+import IO  from 'socket.io-client';
+import url from 'url';
 
 class Client {
     constructor(host) {
         this.host = host || 'https://api.tfl.lu/latest';
+        var { pathname } = url.parse(this.host);
+        this.path = pathname + '/stream';
         this.subscriptions = {};
         this.io = IO(this.host, {
-            path: '/stream'
+            path: this.path
         });
         this.io.on('update', update => {
             if (!update.path || !this.subscriptions[update.path]) {
@@ -22,6 +25,10 @@ class Client {
         }
         this.subscriptions[path].push(callback);
     }
+}
+
+if (window) {
+    window.TfLAPIClient = Client;
 }
 
 export default Client;

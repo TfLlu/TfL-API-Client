@@ -8,6 +8,30 @@
 
 <h1>TfL API Client Demo</h1>
 
+<div id="app">
+    <pre>{{apiJSON}}</pre>
+</div>
+
 <script src="bundle.js"></script>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            api: {}
+        },
+        computed: {
+            apiJSON: function() {
+                return JSON.stringify(this.api, null, 2);
+            }
+        }
+    })
+
+    var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    api.subscribe('/BikePoint', function(data) {
+        console.log(data);
+        app.api = data;
+    });
+</script>
 </body>
 </html>
