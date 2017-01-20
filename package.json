@@ -2,7 +2,7 @@
   "name": "tfl-api-client",
   "version": "0.0.2",
   "description": "",
-  "main": "index.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
