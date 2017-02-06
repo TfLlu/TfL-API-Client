@@ -6,17 +6,35 @@
     <title>TfL API Client Demo</title>
 </head>
 <body>
-<div id="app" class="container">
+<div id="app" class="container-fluid">
     <h1>TfL API Client Demo</h1>
-    <div class="card" v-if="api.type">
-        <div class="card-block">
-            <h4 class="card-title">Type: {{api.type}}</h4>
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>/BikePoint</h2>
+            <div class="card" v-if="apiBikePoint.type">
+                <div class="card-block">
+                    <h4 class="card-title">Type: {{apiBikePoint.type}}</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li v-for="row in apiBikePoint.data" class="list-group-item">
+                        {{row.data.properties.name}}
+                    </li>
+                </ul>
+            </div>
         </div>
-        <ul class="list-group list-group-flush">
-            <li v-for="row in api.data" class="list-group-item">
-                {{row.data.properties.name}}
-            </li>
-        </ul>
+        <div class="col-sm-6">
+            <h2>/StopPoint/Departures</h2>
+            <div class="card" v-if="apiDepartures.type">
+                <div class="card-block">
+                    <h4 class="card-title">Type: {{apiDepartures.type}}</h4>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li v-for="(data, key) in apiDepartures.data" class="list-group-item">
+                        {{key}} - {{data[0].destination}}
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -26,18 +44,28 @@
     var app = new Vue({
         el: '#app',
         data: {
-            api: {}
+            apiBikePoint: {},
+            apiDepartures: {}
         },
         computed: {
             apiJSON: function() {
-                return JSON.stringify(this.api, null, 2);
-            }
+                return JSON.stringify(this.apiBikePoint, null, 2);
+            },
+            apiJSON: function() {
+                return JSON.stringify(this.apiDepartures, null, 2);
+            },
         }
     });
 
     var api = new TfLAPIClient('https://api.tfl.lu/dev');
     api.subscribe('/BikePoint', function(data) {
+        app.apiBikePoint = data;
+    });
+    /*api.subscribe('/StopPoint', function(data) {
         app.api = data;
+    });*/
+    api.subscribe('/StopPoint/Departures', function(data) {
+        app.apiDepartures = data;
     });
 </script>
 </body>
