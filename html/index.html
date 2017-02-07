@@ -7,39 +7,59 @@
 </head>
 <body>
 <div id="app" class="container-fluid">
-    <h1>TfL STREAMING API Client Demo</h1>
+    <h1>TfL 💖⭐️ STREAMING ❤️💖 API Client Demo 😋 👍</h1>
     <div class="row">
         <div class="col-sm-6">
             <h2>/BikePoint</h2>
-            <div class="card" v-if="apiBikePoint.type">
-                <div class="card-block">
-                    <h4 class="card-title">Type: {{apiBikePoint.type}}</h4>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li v-for="row in apiBikePoint.data" class="list-group-item">
-                        {{row.data.properties.name}}
-                    </li>
-                </ul>
-            </div>
+            <table class="table table-bordered" v-if="apiBikePoint.type">
+                <tr>
+                    <th colspan="4">Type: {{apiBikePoint.type}}</th>
+                </tr>
+                <tr>
+                    <th>BikePoint</th>
+                    <th>Bikes available</th>
+                    <th>E-Bikes available</th>
+                    <th>Docks free</th>
+                </tr>
+                <tr v-for="row in apiBikePoint.data">
+                    <td>{{row.data.properties.name}}</td>
+                    <td>{{row.data.properties.available_bikes}}</td>
+                    <td>{{row.data.properties.available_ebikes}}</td>
+                    <td>{{row.data.properties.available_docks}}</td>
+                </tr>
+            </table>
         </div>
         <div class="col-sm-6">
             <h2>/StopPoint/Departures</h2>
-            <div class="card" v-if="apiDepartures.type">
-                <div class="card-block">
-                    <h4 class="card-title">Type: {{apiDepartures.type}}</h4>
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li v-for="(data, key) in apiDepartures.data" class="list-group-item">
-                        {{key}} - {{data[0].destination}}
-                    </li>
-                </ul>
-            </div>
+            <table class="table table-bordered" v-if="apiDepartures.type">
+                <tr>
+                    <th colspan="4">Type: {{apiDepartures.type}}</th>
+                </tr>
+                <tr>
+                    <th>Stoppoint</th>
+                    <th>Departure</th>
+                    <th>Line</th>
+                    <th>Destination</th>
+                </tr>
+                <template v-for="(data, key) in apiDepartures.data">
+                    <tr>
+                        <td v-bind:rowspan="data.length + 1">{{key}}</td>
+                    </tr>
+                    <tr v-for="departure in data">
+                        <td>{{time(departure.departure)}}</td>
+                        <td v-if="departure.type === 'bus'">Bus {{departure.line}}</td>
+                        <td v-else>Train {{departure.trainId}}</td>
+                        <td>{{departure.destination}}</td>
+                    </tr>
+                </template>
+            </table>
         </div>
     </div>
 </div>
 
 <script src="bundle.js"></script>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
 <script>
     var app = new Vue({
         el: '#app',
@@ -53,11 +73,17 @@
             },
             apiJSON: function() {
                 return JSON.stringify(this.apiDepartures, null, 2);
-            },
+            }
+        },
+        methods: {
+            time: function (unix) {
+                return moment.unix(unix).format('HH:mm');
+            }
         }
     });
 
-    var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    //var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    var api = new TfLAPIClient('http://localhost:9000');
     api.subscribe('/BikePoint', function(data) {
         app.apiBikePoint = data;
     });
