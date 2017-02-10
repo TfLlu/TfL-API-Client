@@ -131,7 +131,6 @@
     });
 
     var api = new TfLAPIClient('https://api.tfl.lu/dev');
-    //var api = new TfLAPIClient('http://localhost:9000');
     api.subscribe('/BikePoint', function(data) {
         app.apiBikePoint = data;
     });
@@ -141,9 +140,6 @@
     api.subscribe('/Weather', function(data) {
         app.apiWeather = data;
     });
-    /*api.subscribe('/StopPoint', function(data) {
-        app.api = data;
-    });*/
     api.subscribe('/StopPoint/Departures', function(data) {
         app.apiDepartures = data;
     });
