@@ -130,7 +130,7 @@
         }
     });
 
-    var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    var api = new TfLAPIClient('https://api.tfl.lu/v1');
     api.subscribe('/BikePoint', function(data) {
         app.apiBikePoint = data;
     });
