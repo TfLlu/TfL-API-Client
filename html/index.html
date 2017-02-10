@@ -30,6 +30,26 @@
             </table>
         </div>
         <div class="col-sm-6">
+            <h2>/Occupancy/Carpark</h2>
+            <table class="table table-bordered" v-if="apiCarpark.type">
+                <tr>
+                    <th colspan="4">Type: {{apiCarpark.type}}</th>
+                </tr>
+                <tr>
+                    <th>CarPark</th>
+                    <th>Total</th>
+                    <th>Free</th>
+                    <th>Trend</th>
+                </tr>
+                <tr v-for="row in apiCarpark.data">
+                    <td>{{row.data.properties.name}}</td>
+                    <td>{{row.data.properties.total}}</td>
+                    <td>{{row.data.properties.free}}</td>
+                    <td>{{row.data.properties.trend}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-6">
             <h2>/StopPoint/Departures</h2>
             <table class="table table-bordered" v-if="apiDepartures.type">
                 <tr>
@@ -54,6 +74,26 @@
                 </template>
             </table>
         </div>
+        <div class="col-sm-6">
+            <h2>/Weather</h2>
+            <table class="table table-bordered" v-if="apiWeather.type">
+                <tr>
+                    <th colspan="4">Type: {{apiWeather.type}}</th>
+                </tr>
+                <tr>
+                    <th>Weather</th>
+                    <th>Pressure</th>
+                    <th>Wind</th>
+                    <th>Visibility</th>
+                </tr>
+                <tr>
+                    <td>{{ apiWeather.data.weather[0].description }}</td>
+                    <td>{{ apiWeather.data.main.temp }}°C {{ apiWeather.data.main.pressure }}hPa {{ apiWeather.data.main.humidity }}%</td>
+                    <td>{{ apiWeather.data.wind.speed }}km/h {{ apiWeather.data.wind.deg }}°</td>
+                    <td>{{ apiWeather.data.visibility }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -65,7 +105,9 @@
         el: '#app',
         data: {
             apiBikePoint: {},
-            apiDepartures: {}
+            apiDepartures: {},
+            apiCarpark: {},
+            apiWeather: {}
         },
         computed: {
             apiJSON: function() {
@@ -73,6 +115,12 @@
             },
             apiJSON: function() {
                 return JSON.stringify(this.apiDepartures, null, 2);
+            },
+            apiJSON: function() {
+                return JSON.stringify(this.apiCarpark, null, 2);
+            },
+            apiJSON: function() {
+                return JSON.stringify(this.apiWeather, null, 2);
             }
         },
         methods: {
@@ -82,10 +130,16 @@
         }
     });
 
-    var api = new TfLAPIClient('https://api.tfl.lu/dev');
-    //var api = new TfLAPIClient('http://localhost:9000');
+    //var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    var api = new TfLAPIClient('http://localhost:9000');
     api.subscribe('/BikePoint', function(data) {
         app.apiBikePoint = data;
+    });
+    api.subscribe('/Occupancy/CarPark', function(data) {
+        app.apiCarpark = data;
+    });
+    api.subscribe('/Weather', function(data) {
+        app.apiWeather = data;
     });
     /*api.subscribe('/StopPoint', function(data) {
         app.api = data;
