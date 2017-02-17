@@ -25,7 +25,7 @@ npm run start
 ``` html
 <script src="path/to/node_modules/tfl-api-client/dist/bundle.js"></script>
 <script>
-    var api = new TfLAPIClient('https://api.tfl.lu/dev');
+    var api = new TfLAPIClient('https://api.tfl.lu/v1');
     api.subscribe('/BikePoint', function(data) {
         console.log(data)
     });
@@ -37,7 +37,7 @@ npm run start
 ``` javascript
 const TfLAPIClient = require('tfl-api-client');
 
-var api = new TfLAPIClient('https://api.tfl.lu/dev');
+var api = new TfLAPIClient('https://api.tfl.lu/v1');
 api.subscribe('/BikePoint', function(data) {
     console.log(data)
 });
