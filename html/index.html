@@ -78,19 +78,43 @@
             <h2>/Weather</h2>
             <table class="table table-bordered" v-if="apiWeather.type">
                 <tr>
-                    <th colspan="4">Type: {{apiWeather.type}}</th>
+                    <th colspan="6">Type: {{apiWeather.type}}</th>
                 </tr>
                 <tr>
                     <th>Weather</th>
+                    <th>Temperature</th>
                     <th>Pressure</th>
+                    <th>Humidity</th>
                     <th>Wind</th>
                     <th>Visibility</th>
                 </tr>
                 <tr>
                     <td>{{ apiWeather.data.weather[0].description }}</td>
-                    <td>{{ apiWeather.data.main.temp }}°C {{ apiWeather.data.main.pressure }}hPa {{ apiWeather.data.main.humidity }}%</td>
+                    <td>{{ apiWeather.data.main.temp }}°C</td>
+                    <td>{{ apiWeather.data.main.pressure }}hPa</td>
+                    <td>{{ apiWeather.data.main.humidity }}%</td>
                     <td>{{ apiWeather.data.wind.speed }}km/h {{ apiWeather.data.wind.deg }}°</td>
                     <td>{{ apiWeather.data.visibility }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <h2>/Weather/Airquality</h2>
+            <table class="table table-bordered" v-if="apiAirquality.type">
+                <tr>
+                    <th colspan="4">Type: {{apiAirquality.type}}</th>
+                </tr>
+                <tr>
+                    <th>Weather station</th>
+                    <th>Temp</th>
+                    <th>PM10</th>
+                    <th>CO</th>
+                </tr>
+                <tr v-for="row in apiAirquality.data">
+                    <td>{{row.data.properties.name}}</td>
+                    <td>{{row.data.properties.temp}}</td>
+                    <td>{{row.data.properties.pm10}}</td>
+                    <td>{{row.data.properties.co}}</td>
                 </tr>
             </table>
         </div>
@@ -107,7 +131,8 @@
             apiBikePoint: {},
             apiDepartures: {},
             apiCarpark: {},
-            apiWeather: {}
+            apiWeather: {},
+            apiAirquality: {}
         },
         computed: {
             apiJSON: function() {
@@ -121,6 +146,9 @@
             },
             apiJSON: function() {
                 return JSON.stringify(this.apiWeather, null, 2);
+            },
+            apiJSON: function() {
+                return JSON.stringify(this.apiAirquality, null, 2);
             }
         },
         methods: {
@@ -130,7 +158,7 @@
         }
     });
 
-    var api = new TfLAPIClient('https://api.tfl.lu/v1');
+    var api = new TfLAPIClient();
     api.subscribe('/BikePoint', function(data) {
         app.apiBikePoint = data;
     });
@@ -139,6 +167,9 @@
     });
     api.subscribe('/Weather', function(data) {
         app.apiWeather = data;
+    });
+    api.subscribe('/Weather/Airquality', function(data) {
+        app.apiAirquality = data;
     });
     api.subscribe('/StopPoint/Departures', function(data) {
         app.apiDepartures = data;

@@ -3,7 +3,7 @@ import url from 'url';
 
 class Client {
     constructor(urlString) {
-        urlString = urlString || 'https://api.tfl.lu/latest';
+        urlString = urlString || 'https://api.tfl.lu/v1';
         this.host = url.resolve(urlString, '/');
 
         var { pathname } = url.parse(urlString);
