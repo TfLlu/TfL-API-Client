@@ -12,10 +12,11 @@ module.exports = {
         path: DIST_DIR,
         filename: 'bundle.js',
         libraryTarget: 'umd',
-        library: 'TfLAPIClient'
+        library: 'TfLAPIClient',
+        globalObject: 'typeof self !== \'undefined\' ? self : this'
     },
     module: {
-        loaders: [
+        rules: [
             {
                 loader: 'babel-loader',
                 test: /\.js$/,
